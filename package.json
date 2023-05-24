@@ -5,11 +5,25 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "build:test": "vue-cli-service build",
+    "build:pro": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "release": "standard-version"
   },
   "dependencies": {
+    "@reactivex/rxjs": "^6.6.7",
+    "@types/js-cookie": "^3.0.3",
+    "@types/lodash-es": "^4.17.7",
+    "axios": "^1.4.0",
     "core-js": "^3.8.3",
+    "cross-env": "^7.0.3",
+    "echarts": "^5.4.2",
+    "element-ui": "^2.15.13",
+    "js-cookie": "^3.0.5",
+    "lodash-es": "^4.17.21",
     "register-service-worker": "^1.7.2",
+    "rxjs": "^7.8.1",
+    "standard-version": "^9.5.0",
     "vue": "^2.6.14",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^9.1.2",
