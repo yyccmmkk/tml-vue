@@ -1,17 +1,17 @@
-import { ajax } from 'rxjs/ajax';
-import { of, race } from 'rxjs';
-import { delay } from 'rxjs/operators';
-import Cookies from 'js-cookie';
+import { ajax } from 'rxjs/ajax'
+import { of, race } from 'rxjs'
+import { delay } from 'rxjs/operators'
+import Cookies from 'js-cookie'
 
-const win:any = window;
-const baseURL: string = process.env.REACT_APP_BASE_URL || win.top.location.origin || '';
-const basePath: string = process.env.REACT_APP_BASE_PATH || '';
-const regExp = /\/index\/(.+)\/?/;
-const urlRegExp = /demo/;
-const aTokenRegExp = /\/adminToken(?=\/)/;
-const cTokenRegExp = /\/cacToken(?=\/)/;
-const noTokenRegExp = /\/noToken(?=\/)/;
-const axios = require('axios');
+const win:any = window
+const baseURL: string = process.env.REACT_APP_BASE_URL || win.top.location.origin || ''
+const basePath: string = process.env.REACT_APP_BASE_PATH || ''
+const regExp = /\/index\/(.+)\/?/
+const urlRegExp = /demo/
+const aTokenRegExp = /\/adminToken(?=\/)/
+const cTokenRegExp = /\/cacToken(?=\/)/
+const noTokenRegExp = /\/noToken(?=\/)/
+const axios = require('axios')
 
 const instance = axios.create({
   baseURL,
@@ -22,10 +22,10 @@ const instance = axios.create({
   transformRequest: [
     function (data: any = {}, headers: any) {
       // Do whatever you want to transform the data
-      return JSON.stringify(data);
+      return JSON.stringify(data)
     }
   ]
-});
+})
 
 //
 for (const v of [instance]) {
@@ -35,45 +35,45 @@ for (const v of [instance]) {
           const {
             url,
             baseURL
-          } = config;
+          } = config
           // Do something before request is sent
-          config.url = url.replace(urlRegExp, '');
-          const match = url.match(urlRegExp);
+          config.url = url.replace(urlRegExp, '')
+          const match = url.match(urlRegExp)
           if (match) {
             config.baseURL =
-            match[1] === 'ofc' ? `${baseURL}:30210` : `${baseURL}:30250`;
+            match[1] === 'ofc' ? `${baseURL}:30210` : `${baseURL}:30250`
           }
-          return config;
+          return config
         }
       : (config: any) => {
-          const { headers } = config;
-          const token = sessionStorage.getItem('token');
-          const adminToken = Cookies.get('Admin-Token') || undefined;
-          const isAToken = aTokenRegExp.test(config.url);
-          const isCToken = cTokenRegExp.test(config.url);
-          const isNoToken = noTokenRegExp.test(config.url);
-          const bearer = isCToken ? 'bearer' : 'Bearer';
+          const { headers } = config
+          const token = sessionStorage.getItem('token')
+          const adminToken = Cookies.get('Admin-Token') || undefined
+          const isAToken = aTokenRegExp.test(config.url)
+          const isCToken = cTokenRegExp.test(config.url)
+          const isNoToken = noTokenRegExp.test(config.url)
+          const bearer = isCToken ? 'bearer' : 'Bearer'
           Object.assign(
             headers.common,
             !isNoToken ? { Authorization: `${bearer} ${isCToken ? token : adminToken}` } : {}
-          );
-          config.url = config.url.replace(noTokenRegExp, '').replace(aTokenRegExp, '').replace(cTokenRegExp, '');
-          return config;
+          )
+          config.url = config.url.replace(noTokenRegExp, '').replace(aTokenRegExp, '').replace(cTokenRegExp, '')
+          return config
         },
     (error: any) => {
       // Do something with request error
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
-  );
+  )
   v.interceptors.response.use(
     (response: any) => {
       // 对响应数据做点什么
-      return response;
+      return response
     },
     (error: any) => {
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
-  );
+  )
 }
 
 // eslint-disable-next-line
@@ -93,13 +93,13 @@ class _http {  // _http  配合 rxjs 流式操作
   };
 
   static post (url: string, data: any) {
-    const cache = _http.cache;
+    const cache = _http.cache
     cache.source = {
       url,
       data,
       baseURL
-    };
-    _http.interceptors.beforeRequest(_http.cache.source);
+    }
+    _http.interceptors.beforeRequest(_http.cache.source)
     return race(
       of({
         code: 408,
@@ -115,7 +115,7 @@ class _http {  // _http  配合 rxjs 流式操作
           token: sessionStorage.getItem('access_token')
         }
       })
-    );
+    )
   }
 }
 
@@ -126,34 +126,34 @@ if (process.env.APP_API_ENV === 'local') {
       const {
         url,
         baseURL
-      } = config;
+      } = config
       // Do something before request is sent
-      config.url = url.replace(urlRegExp, '');
-      const match = url.match(urlRegExp);
+      config.url = url.replace(urlRegExp, '')
+      const match = url.match(urlRegExp)
       if (match) {
         config.baseURL =
-          match[1] === 'ofc' ? `${baseURL}:30210` : `${baseURL}:30250`;
+          match[1] === 'ofc' ? `${baseURL}:30210` : `${baseURL}:30250`
       }
-      return config;
+      return config
     },
     (error: any) => {
       // Do something with request error
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
-  );
+  )
   _http.interceptors.beforeRequest = (source: {
     url: string
     data: any
     baseURL: string
   }) => {
-    const { url } = source;
-    const match = url.match(urlRegExp);
+    const { url } = source
+    const match = url.match(urlRegExp)
     if (match) {
-      const temp = match[1] === 'tms' ? ':30250' : ':30210';
-      source.url = url.replace(urlRegExp, temp);
+      const temp = match[1] === 'tms' ? ':30250' : ':30210'
+      source.url = url.replace(urlRegExp, temp)
     }
-  };
+  }
 }
 
-export default instance;
-export { baseURL, basePath, instance as http, _http };
+export default instance
+export { baseURL, basePath, instance as http, _http }
